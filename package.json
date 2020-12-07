@@ -13,9 +13,12 @@
   "dependencies": {
     "@nuxt/typescript-runtime": "^2.0.0",
     "@nuxtjs/axios": "^5.12.2",
+    "@nuxtjs/style-resources": "^1.0.0",
     "bootstrap": "^4.5.2",
     "bootstrap-vue": "^2.17.3",
     "core-js": "^3.6.5",
+    "moment": "^2.29.1",
+    "node-sass": "^5.0.0",
     "nuxt": "^2.14.6"
   },
   "devDependencies": {
@@ -26,6 +29,9 @@
     "@nuxtjs/eslint-module": "^2.0.0",
     "babel-eslint": "^10.1.0",
     "eslint": "^7.10.0",
-    "eslint-plugin-nuxt": "^1.0.0"
+    "eslint-plugin-nuxt": "^1.0.0",
+    "fibers": "^5.0.0",
+    "sass": "^1.30.0",
+    "sass-loader": "^10.1.0"
   }
 }
