@@ -27,6 +27,12 @@ module.exports = {
         semi: "off",
         "space-before-function-paren": "off",
         eqeqeq: "off",
-        curly: "off"
+        curly: "off",
+        "no-trailing-spaces": ["warn"],
+        "padded-blocks": ["warn"],
+        "no-unused-vars": "off",
+        "@typescript-eslint/no-unused-vars": "off",
+        "no-return-assign": "off",
+        "no-console": "off"
     }
 }
