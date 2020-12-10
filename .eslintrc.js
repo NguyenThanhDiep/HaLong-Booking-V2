@@ -24,6 +24,7 @@ module.exports = {
         "vue/singleline-html-element-content-newline": "off",
         "vue/require-prop-types": "off",
         indent: ["warn", 4],
+        "vue/html-indent": ["warn", 4],
         semi: "off",
         "space-before-function-paren": "off",
         eqeqeq: "off",

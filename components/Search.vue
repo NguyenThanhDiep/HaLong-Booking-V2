@@ -1,71 +1,76 @@
 <template>
-  <div class="search-area w-100">
-    <b-img
-      src="https://static.asiawebdirect.com/m/bangkok/portals/vietnam/homepage/ha-long-bay/pagePropertiesImage/ha-long-bay.jpg.jpg"
-      alt="Ha Long Background"
-      block
-      fuild
-      center
-      class="search-img"
-      :style="{ height: heightImg }"
-    />
-    <div class="search-form px-md-0 px-lg-4 py-md-0 py-lg-3" :style="{ top: typePage === 'home' ? '100px' : '37.5px' }">
-      <h5 class="text-left mb-3 mx-3">Trải nghiệm kì nghỉ tuyệt vời</h5>
-      <div class="row mb-2 mb-lg-3 mx-3">
-        <div class="col-lg-4 col-md-12 pl-0">
-          <b-input
-            id="inline-form-input-name"
-            v-model="nameHotel"
-            class="mb-2 mr-md-2 mb-md-0"
-            placeholder="Tên khách sạn"
-          ></b-input>
+    <div class="search-area w-100">
+        <b-img
+            src="https://static.asiawebdirect.com/m/bangkok/portals/vietnam/homepage/ha-long-bay/pagePropertiesImage/ha-long-bay.jpg.jpg"
+            alt="Ha Long Background"
+            block
+            fuild
+            center
+            class="search-img"
+            :style="{ height: heightImg }"
+        />
+        <div class="search-form px-md-0 px-lg-4 py-md-0 py-lg-3" :style="{ top: typePage1 === 'home' ? '100px' : '37.5px' }">
+            <h5 class="text-left mb-3 mx-3">Trải nghiệm kì nghỉ tuyệt vời</h5>
+            <div class="row mb-2 mb-lg-3 mx-3">
+                <div class="col-lg-4 col-md-12 pl-0">
+                    <b-input
+                        id="inline-form-input-name"
+                        v-model="nameHotel"
+                        class="mb-2 mr-md-2 mb-md-0"
+                        placeholder="Tên khách sạn"
+                    ></b-input>
+                </div>
+                <div class="col-lg-3 col-md-12 mt-lg-0 pl-0 mt-md-2">
+                    <!-- <b-form-datepicker
+                        v-model="checkInDate"
+                        class="mb-2 mr-md-2 mb-md-0"
+                        placeholder="Nhận phòng"
+                        :date-format-options="{ year: 'numeric', month: 'numeric', day: 'numeric' }"
+                        locale="vi"
+                        :value-as-date="true"
+                        :state="validateCheckInDate"
+                    ></b-form-datepicker> -->
+                    <div v-show="validateCheckInDate===false" class="required font-italic">
+                        {{ wrongCheckInDateInfo }}
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-12 mt-lg-0 pl-0 mt-md-2">
+                    <!-- <b-form-datepicker
+                        v-model="checkOutDate"
+                        class="mb-2 mr-md-2 mb-md-0"
+                        placeholder="Trả phòng"
+                        :date-format-options="{ year: 'numeric', month: 'numeric', day: 'numeric' }"
+                        locale="vi"
+                        :value-as-date="true"
+                        :state="validateCheckOutDate"
+                    ></b-form-datepicker> -->
+                    <div v-show="validateCheckOutDate===false" class="required font-italic">
+                        {{ wrongCheckOutDateInfo }}
+                    </div>
+                </div>
+                <div class="col-lg-2 col-md-12 mt-md-2 mt-lg-0 pl-md-0 text-lg-left">
+                    <b-button class="w-lg-100 px-5" :disabled="isDisableSearchButton" variant="primary" @click="onSearchHotel">Tìm</b-button>
+                </div>
+            </div>
         </div>
-        <div class="col-lg-3 col-md-12 mt-lg-0 pl-0 mt-md-2">
-          <b-form-datepicker
-            v-model="checkInDate"
-            class="mb-2 mr-md-2 mb-md-0"
-            placeholder="Nhận phòng"
-            :date-format-options="{ year: 'numeric', month: 'numeric', day: 'numeric' }"
-            locale="vi"
-            :value-as-date="true"
-            :state="validateCheckInDate"
-          ></b-form-datepicker>
-          <div v-show="validateCheckInDate===false" class="required font-italic">
-            {{ wrongCheckInDateInfo }}
-          </div>
-        </div>
-        <div class="col-lg-3 col-md-12 mt-lg-0 pl-0 mt-md-2">
-          <b-form-datepicker
-            v-model="checkOutDate"
-            class="mb-2 mr-md-2 mb-md-0"
-            placeholder="Trả phòng"
-            :date-format-options="{ year: 'numeric', month: 'numeric', day: 'numeric' }"
-            locale="vi"
-            :value-as-date="true"
-            :state="validateCheckOutDate"
-          ></b-form-datepicker>
-          <div v-show="validateCheckOutDate===false" class="required font-italic">
-            {{ wrongCheckOutDateInfo }}
-          </div>
-        </div>
-        <div class="col-lg-2 col-md-12 mt-md-2 mt-lg-0 pl-md-0 text-lg-left">
-          <b-button class="w-lg-100 px-5" :disabled="isDisableSearchButton" variant="primary" @click="onSearchHotel">Tìm</b-button>
-        </div>
-      </div>
     </div>
-  </div>
 </template>
 
 <script lang="ts">
 import { Vue, Prop } from 'nuxt-property-decorator';
 import moment from 'moment';
-export class SearchComponent extends Vue {
+export default class SearchComponent extends Vue {
     // -----Prop-----//
     @Prop({ default: 'normal' }) typePage!: string;
 
     nameHotel: string = '';
     checkInDate: Date | null = null
     checkOutDate: Date | null = null;
+    typePage1: string = 'normal';
+
+    mounted() {
+        this.typePage1 = this.typePage;
+    }
 
     get heightImg(): string {
         return this.typePage === 'home' ? '100vh' : '300px';
