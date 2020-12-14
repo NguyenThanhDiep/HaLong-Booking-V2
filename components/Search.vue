@@ -21,6 +21,7 @@
                     ></b-input>
                 </div>
                 <div class="col-lg-3 col-md-12 mt-lg-0 pl-0 mt-md-2">
+                    <dateTimePicker v-model="checkInDate" placeholder="Nhận phòng"></dateTimePicker>
                     <!-- <b-form-datepicker
                         v-model="checkInDate"
                         class="mb-2 mr-md-2 mb-md-0"
@@ -35,6 +36,7 @@
                     </div>
                 </div>
                 <div class="col-lg-3 col-md-12 mt-lg-0 pl-0 mt-md-2">
+                    <dateTimePicker v-model="checkOutDate" placeholder="Trả phòng"></dateTimePicker>
                     <!-- <b-form-datepicker
                         v-model="checkOutDate"
                         class="mb-2 mr-md-2 mb-md-0"
@@ -57,8 +59,14 @@
 </template>
 
 <script lang="ts">
-import { Vue, Prop } from 'nuxt-property-decorator';
+import { Vue, Prop, Component } from 'nuxt-property-decorator';
 import moment from 'moment';
+import dateTimePicker from '@/components/DateTimePicker.vue';
+@Component({
+    components: {
+        dateTimePicker
+    }
+})
 export default class SearchComponent extends Vue {
     // -----Prop-----//
     @Prop({ default: 'normal' }) typePage!: string;
@@ -79,9 +87,9 @@ export default class SearchComponent extends Vue {
     onSearchHotel() {
         const searchString = this.nameHotel.trim();
         if (!!searchString || !!this.checkInDate || !!this.checkOutDate)
-            this.$router.push({ name: 'FindHotel', query: { searchString, checkInDate: moment(this.checkInDate).format('D/M/YYYY'), checkOutDate: moment(this.checkOutDate).format('D/M/YYYY') } })
+            this.$router.push({ name: 'findHotel', query: { searchString, checkInDate: moment(this.checkInDate).format('D/M/YYYY'), checkOutDate: moment(this.checkOutDate).format('D/M/YYYY') } })
                 .then(() => { }).catch(() => { });
-        else this.$router.push({ name: 'FindHotel' }).then(() => { }).catch(() => { });
+        else this.$router.push({ name: 'findHotel' }).then(() => { }).catch(() => { });
     }
 
     get validateCheckInDate(): boolean | null {
@@ -118,7 +126,7 @@ export default class SearchComponent extends Vue {
 }
 </script>
 
-<style lang="scss">
+<style scoped lang="scss">
 .search-area ::v-deep {
     z-index: 1;
     color: $color-blue;

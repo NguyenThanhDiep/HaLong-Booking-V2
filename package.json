@@ -20,7 +20,8 @@
     "moment": "^2.29.1",
     "node-sass": "^5.0.0",
     "nuxt": "^2.14.6",
-    "nuxt-property-decorator": "^2.8.8"
+    "nuxt-property-decorator": "^2.8.8",
+    "vue-bootstrap-datetimepicker": "^5.0.1"
   },
   "devDependencies": {
     "@nuxt/types": "^2.14.6",

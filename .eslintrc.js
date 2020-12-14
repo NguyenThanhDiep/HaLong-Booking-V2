@@ -34,6 +34,10 @@ module.exports = {
         "no-unused-vars": "off",
         "@typescript-eslint/no-unused-vars": "off",
         "no-return-assign": "off",
-        "no-console": "off"
+        "no-console": "off",
+        "vue/attributes-order": "off",
+        "vue/no-use-v-if-with-v-for": "off",
+        "vue/no-parsing-error": "off",
+        "vue/no-v-html": "off"
     }
 }
