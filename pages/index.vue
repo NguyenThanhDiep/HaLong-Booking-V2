@@ -91,7 +91,6 @@ export default class HomeComponent extends Vue {
 
     async mounted() {
         const resAllHotels = await this.hotelService.getAllHotels();
-        console.log(resAllHotels)
         this.hotels = this.mapDataFromAPI(resAllHotels).slice(0, 8);
         for (let i = 0; i < this.hotels.length / 4; ++i) {
             this.hotelsFormat.push(this.hotels.slice(i * 4, i * 4 + 4));
