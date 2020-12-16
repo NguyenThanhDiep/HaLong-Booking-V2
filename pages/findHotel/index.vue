@@ -1,60 +1,6 @@
 <template>
     <div class="hotel">
-        <div class="search-area">
-            <b-img
-                src="https://static.asiawebdirect.com/m/bangkok/portals/vietnam/homepage/ha-long-bay/pagePropertiesImage/ha-long-bay.jpg.jpg"
-                alt="Ha Long Background"
-                block
-                fuild
-                center
-                class="search-img"
-                :style="{ height: 300 + 'px'}"
-            />
-            <div class="search-form px-md-0 px-lg-4 py-md-0 py-lg-3">
-                <h5 class="text-left mb-3 mx-3">Trải nghiệm kì nghỉ tuyệt vời</h5>
-                <div class="row mb-2 mb-lg-3 mx-3">
-                    <div class="col-lg-4 col-md-12 pl-0">
-                        <b-input
-                            id="inline-form-input-name"
-                            v-model="nameHotel"
-                            class="mb-2 mr-md-2 mb-md-0"
-                            placeholder="Tên khách sạn"
-                        ></b-input>
-                    </div>
-                    <div class="col-lg-3 col-md-12 mt-lg-0 pl-0 mt-md-2">
-                        <b-form-datepicker
-                            v-model="checkInDate"
-                            class="mb-2 mr-md-2 mb-md-0"
-                            placeholder="Nhận phòng"
-                            :date-format-options="{ year: 'numeric', month: 'numeric', day: 'numeric' }"
-                            locale="vi"
-                            :value-as-date="true"
-                            :state="validateCheckInDate"
-                        ></b-form-datepicker>
-                        <div v-show="validateCheckInDate===false" class="required font-italic">
-                            {{ wrongCheckInDateInfo }}
-                        </div>
-                    </div>
-                    <div class="col-lg-3 col-md-12 mt-lg-0 pl-0 mt-md-2">
-                        <b-form-datepicker
-                            v-model="checkOutDate"
-                            class="mb-2 mr-md-2 mb-md-0"
-                            placeholder="Trả phòng"
-                            :date-format-options="{ year: 'numeric', month: 'numeric', day: 'numeric' }"
-                            locale="vi"
-                            :value-as-date="true"
-                            :state="validateCheckOutDate"
-                        ></b-form-datepicker>
-                        <div v-show="validateCheckOutDate===false" class="required font-italic">
-                            {{ wrongCheckOutDateInfo }}
-                        </div>
-                    </div>
-                    <div class="col-lg-2 col-md-12 mt-md-2 mt-lg-0 pl-md-0 text-lg-left">
-                        <b-button class="w-lg-100 px-5" :disabled="isDisableSearchButton" variant="primary" @click="onSearchHotel">Tìm</b-button>
-                    </div>
-                </div>
-            </div>
-        </div>
+        <SearchComponent @onAfterSearchHotel="onAfterSearchHotel" />
         <div class="row text-left">
             <!-- Search Menu when Screen Large -->
             <div class="col-3 p-3 pl-4 d-none d-lg-block">
@@ -208,20 +154,18 @@
 import { Vue, Prop, Component, Watch } from 'nuxt-property-decorator';
 import HotelService from '@/services/hotelService';
 import Hotel, { FreeService, ServiceHotel, StarHotel, FilterCriteria } from '@/models/Hotel';
+import SearchComponent from '@/components/Search.vue';
 import moment from 'moment';
 
-@Component({})
+@Component({
+    components: { SearchComponent }
+})
 export default class FindHotelComponent extends Vue {
     // ------------ Service -------------//
     hotelService: HotelService = new HotelService();
 
     hotelsOrigin: Array<Hotel> = [];
     hotelsFiltered: Array<Hotel> = [];
-
-    // SearchHotel
-    nameHotel: string = '';
-    checkInDate: Date | null = null;
-    checkOutDate: Date | null = null;
 
     filterCriteria: FilterCriteria = new FilterCriteria();
     firstPrice: number = 0;
@@ -240,22 +184,10 @@ export default class FindHotelComponent extends Vue {
 
     // -----Method-----//
     async mounted() {
-        // Parse checkInDate and checkOutDate
-        const checkIn = this.$route.query.checkInDate as string;
-        if (checkIn) {
-            const dateIn = checkIn.split('/');
-            if (dateIn.length === 3) this.checkInDate = moment(`${dateIn[2]}-${dateIn[1]}-${dateIn[0]}`).toDate();
-        }
-        const checkOut = this.$route.query.checkOutDate as string;
-        if (checkOut) {
-            const dateOut = checkOut.split('/');
-            if (dateOut.length === 3) this.checkOutDate = moment(`${dateOut[2]}-${dateOut[1]}-${dateOut[0]}`).toDate();
-        }
         const searchString = this.$route.query.searchString as string;
         let resAllHotels: any[] = [];
         if (searchString) {
             resAllHotels = await this.hotelService.getHotelsByName(searchString);
-            this.nameHotel = searchString;
         } else resAllHotels = await this.hotelService.getAllHotels();
         this.hotelsOrigin = this.mapDataFromAPI(resAllHotels);
         this.hotelsFiltered = this.hotelsOrigin.splice(0, this.hotelsOrigin.length, ...this.hotelsOrigin);
@@ -395,52 +327,15 @@ export default class FindHotelComponent extends Vue {
         this.$router.push({ name: 'hotel-id', params: { id: hotelId.toString() } });
     }
 
-    async onSearchHotel() {
-        const searchString = this.nameHotel.trim();
+    async onAfterSearchHotel(searchString) {
         let resAllHotels: any[] = [];
         if (searchString) {
             resAllHotels = await this.hotelService.getHotelsByName(searchString);
         } else {
             resAllHotels = await this.hotelService.getAllHotels();
         }
-        if (!!searchString || !!this.checkInDate || !!this.checkOutDate) {
-            this.$router.push({ name: 'FindHotel', query: { searchString, checkInDate: moment(this.checkInDate).format('D/M/YYYY'), checkOutDate: moment(this.checkOutDate).format('D/M/YYYY') } })
-                .then(() => { }).catch(() => { });
-        } else this.$router.push({ name: 'FindHotel' }).then(() => { }).catch(() => { });
         this.hotelsOrigin = this.mapDataFromAPI(resAllHotels);
         this.hotelsFiltered = this.hotelsOrigin.splice(0, this.hotelsOrigin.length, ...this.hotelsOrigin);
-    }
-
-    get validateCheckInDate(): boolean | null {
-        if (this.checkInDate) {
-            return moment(this.checkInDate).isSameOrAfter(moment().startOf('day'), 'dates');
-        }
-        return null;
-    }
-
-    get validateCheckOutDate(): boolean | null {
-        if (!!this.checkInDate && !!this.checkOutDate) {
-            return moment(this.checkOutDate).isAfter(moment().startOf('day'), 'dates') && moment(this.checkOutDate).isAfter(this.checkInDate);
-        }
-        if (this.checkOutDate) {
-            return moment(this.checkOutDate).isAfter(moment().startOf('day'), 'dates');
-        }
-        return null;
-    }
-
-    get isDisableSearchButton(): boolean {
-        return this.validateCheckInDate === false || this.validateCheckOutDate === false;
-    }
-
-    get wrongCheckInDateInfo(): string {
-        if (!!this.checkInDate && !moment(this.checkInDate).isSameOrAfter(moment().startOf('day'), 'dates')) return 'Ngày nhận phòng phải bằng hoặc sau ngày hôm nay';
-        return '';
-    }
-
-    get wrongCheckOutDateInfo(): string {
-        if (!!this.checkInDate && !!this.checkOutDate && !moment(this.checkOutDate).isAfter(this.checkInDate)) return 'Ngày trả phòng phải sau ngày nhận phòng';
-        if (!!this.checkOutDate && !moment(this.checkOutDate).isAfter(moment().startOf('day'), 'dates')) return 'Ngày trả phòng phải sau ngày hôm nay';
-        return '';
     }
 
     onClickMap() {

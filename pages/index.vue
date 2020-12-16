@@ -4,12 +4,13 @@
             <SearchComponent type-page="home" />
         </div>
         <div class="mt-3 p-3">
-            <h5>Các khách sạn nổi bật</h5>
+            <h5 class="text-center">Các khách sạn nổi bật</h5>
             <div class="px-5">
                 <b-card-group v-for="(array, indexArr) in hotelsFormat" :key="indexArr" deck>
                     <b-card
                         v-for="(hotel, index) in array"
                         :key="hotel.name"
+                        no-body
                         :class="[index==3?'d-none d-lg-block':index==2?'d-none d-md-block':'']"
                         class="m-2"
                         @click="onClickHotelImg(hotel.id)"
@@ -17,7 +18,7 @@
                         <div class="card-hotel">
                             <b-card-img-lazy :src="hotel.srcImg" :alt="'Hotel' + index"></b-card-img-lazy>
                         </div>
-                        <b-card-text class="pt-3">
+                        <b-card-text class="pt-3 text-center">
                             <h6>{{ hotel.name }}</h6>
                             <div>{{ hotel.price }} đ</div>
                         </b-card-text>
@@ -26,7 +27,7 @@
             </div>
         </div>
         <div class="px-3">
-            <h5>Cảnh đẹp ở Hạ Long</h5>
+            <h5 class="text-center">Cảnh đẹp ở Hạ Long</h5>
             <div class="px-5">
                 <b-card-group v-for="(array, indexArr) in scenesFormat" :key="indexArr" deck>
                     <b-card
@@ -34,12 +35,13 @@
                         :key="scene.name"
                         :class="[index==3?'d-none d-lg-block':index==2?'d-none d-md-block':'']"
                         class="m-2"
+                        no-body
                         @click="onClickScene"
                     >
                         <div class="card-hotel">
                             <b-card-img-lazy :src="scene.srcImg" :alt="'Scene' + index"></b-card-img-lazy>
                         </div>
-                        <b-card-text class="pt-3">
+                        <b-card-text class="pt-3 text-center">
                             <h6>{{ scene.name }}</h6>
                         </b-card-text>
                     </b-card>
@@ -47,14 +49,14 @@
             </div>
         </div>
         <div class="p-3">
-            <h5>Món ăn ngon ở Hạ Long</h5>
+            <h5 class="text-center">Món ăn ngon ở Hạ Long</h5>
             <div class="px-5">
                 <b-card-group v-for="(array, indexArr) in dishesFormat" :key="indexArr" deck>
-                    <b-card v-for="(dish, index) in array" :key="dish.name" :class="[index==3?'d-none d-lg-block':index==2?'d-none d-md-block':'']" class="m-2">
+                    <b-card v-for="(dish, index) in array" :key="dish.name" :class="[index==3?'d-none d-lg-block':index==2?'d-none d-md-block':'']" class="m-2" no-body>
                         <div class="card-hotel">
                             <b-card-img-lazy :src="dish.srcImg" :alt="'Dish' + index"></b-card-img-lazy>
                         </div>
-                        <b-card-text class="pt-3">
+                        <b-card-text class="pt-3 text-center">
                             <h6>{{ dish.name }}</h6>
                         </b-card-text>
                     </b-card>
@@ -140,7 +142,7 @@ export default class HomeComponent extends Vue {
     }
 
     onClickScene() {
-        this.$router.push({ name: 'TravelExperience' });
+        this.$router.push({ name: 'travelExperience' });
     }
 }
 </script>

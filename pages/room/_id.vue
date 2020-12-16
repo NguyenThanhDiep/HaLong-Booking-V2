@@ -13,14 +13,15 @@
                                 <div class="col-6">
                                     <div class="mb-2">Ngày nhận phòng <span class="required">*</span></div>
                                     <div>
-                                        <b-form-datepicker
+                                        <dateTimePicker v-model="checkInDate" placeholder="Ngày nhận phòng" :class="[validateCheckInDate == false ? 'input-error' : '']"></dateTimePicker>
+                                        <!-- <b-form-datepicker
                                             placeholder="Ngày nhận phòng"
                                             :date-format-options="{ year: 'numeric', month: 'numeric', day: 'numeric' }"
                                             locale="vi"
                                             :value-as-date="true"
                                             @input="onInputCheckInDate"
                                             :state="validateCheckInDate"
-                                        ></b-form-datepicker>
+                                        ></b-form-datepicker> -->
                                     </div>
                                     <div v-show="hasValidate && !validateCheckInDate" class="required font-italic">
                                         {{ wrongCheckInDateInfo }}
@@ -29,14 +30,15 @@
                                 <div class="col-6">
                                     <div class="mb-2">Ngày trả phòng <span class="required">*</span></div>
                                     <div>
-                                        <b-form-datepicker
+                                        <dateTimePicker v-model="checkOutDate" placeholder="Nhận phòng" :class="[validateCheckInDate == false ? 'input-error' : '']"></dateTimePicker>
+                                        <!-- <b-form-datepicker
                                             placeholder="Ngày trả phòng"
                                             :date-format-options="{ year: 'numeric', month: 'numeric', day: 'numeric' }"
                                             locale="vi"
                                             :value-as-date="true"
                                             @input="onInputCheckoutDate"
                                             :state="validateCheckOutDate"
-                                        ></b-form-datepicker>
+                                        ></b-form-datepicker> -->
                                     </div>
                                     <div v-show="hasValidate && !validateCheckOutDate" class="required font-italic">
                                         {{ wrongCheckOutDateInfo }}
@@ -219,9 +221,10 @@ import SearchComponent from '@/components/Search.vue';
 import Hotel, { FreeService, ServiceHotel } from '@/models/Hotel';
 import moment from 'moment';
 import HotelService from '@/services/hotelService';
+import dateTimePicker from '@/components/DateTimePicker.vue';
 
 @Component({
-    components: { SearchComponent }
+    components: { SearchComponent, dateTimePicker }
 })
 export default class RoomComponent extends Vue {
     // ------------ Service -------------//
