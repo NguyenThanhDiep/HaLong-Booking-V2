@@ -27,7 +27,8 @@ export default {
     // Plugins to run before rendering page (https://go.nuxtjs.dev/config-plugins)
     plugins: [
         '~plugins/bootstrapVue.ts',
-        '~plugins/commonFilters.ts'
+        '~plugins/commonFilters.ts',
+        '~plugins/moment.ts'
     ],
 
     // Auto import components (https://go.nuxtjs.dev/config-components)
@@ -54,6 +55,22 @@ export default {
         '@nuxtjs/axios',
         '@nuxtjs/toast'
     ],
+
+    // BoostrapVue (https://bootstrap-vue.org/docs#nuxtjs-module)
+    bootstrapVue: {
+        icons: true,
+        componentPlugins: [
+            'LayoutPlugin',
+            'FormPlugin',
+            'FormCheckboxPlugin',
+            'FormInputPlugin',
+            'FormRadioPlugin',
+            'ToastPlugin',
+            'ModalPlugin',
+            'BVModalPlugin',
+            'BVToastPlugin'
+        ]
+    },
 
     // Axios module configuration (https://go.nuxtjs.dev/config-axios)
     axios: {},

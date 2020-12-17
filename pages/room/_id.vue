@@ -357,7 +357,11 @@ export default class RoomComponent extends Vue {
 
     onBookRoom() {
         this.isShowConfirmPopup = false;
-        this.$toast.success('Hoàn tất!!! Cảm ơn bạn đã chọn công ty chúng tôi.', { duration: 3000 });
+        // this.$toast.success('Hoàn tất!!! Cảm ơn bạn đã chọn công ty chúng tôi.', { duration: 3000 });
+        this.$bvToast.toast('Cảm ơn bạn đã chọn công ty chúng tôi.', {
+            title: 'Hoàn tất!!!',
+            variant: 'success'
+        });
     }
 }
 </script>
