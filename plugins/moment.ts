@@ -9,6 +9,6 @@ export default ({ app }, inject) => {
 //
 declare module 'vue/types/vue' {
     interface Vue {
-      readonly $moment: (stringDate: string) => moment.Moment
+      readonly $moment: (stringDate: moment.MomentInput) => moment.Moment
     }
 }

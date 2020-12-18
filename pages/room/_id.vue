@@ -14,14 +14,6 @@
                                     <div class="mb-2">Ngày nhận phòng <span class="required">*</span></div>
                                     <div>
                                         <dateTimePicker v-model="checkInDate" placeholder="Ngày nhận phòng" :class="[validateCheckInDate == false ? 'input-error' : '']"></dateTimePicker>
-                                        <!-- <b-form-datepicker
-                                            placeholder="Ngày nhận phòng"
-                                            :date-format-options="{ year: 'numeric', month: 'numeric', day: 'numeric' }"
-                                            locale="vi"
-                                            :value-as-date="true"
-                                            @input="onInputCheckInDate"
-                                            :state="validateCheckInDate"
-                                        ></b-form-datepicker> -->
                                     </div>
                                     <div v-show="hasValidate && !validateCheckInDate" class="required font-italic">
                                         {{ wrongCheckInDateInfo }}
@@ -30,15 +22,7 @@
                                 <div class="col-6">
                                     <div class="mb-2">Ngày trả phòng <span class="required">*</span></div>
                                     <div>
-                                        <dateTimePicker v-model="checkOutDate" placeholder="Nhận phòng" :class="[validateCheckInDate == false ? 'input-error' : '']"></dateTimePicker>
-                                        <!-- <b-form-datepicker
-                                            placeholder="Ngày trả phòng"
-                                            :date-format-options="{ year: 'numeric', month: 'numeric', day: 'numeric' }"
-                                            locale="vi"
-                                            :value-as-date="true"
-                                            @input="onInputCheckoutDate"
-                                            :state="validateCheckOutDate"
-                                        ></b-form-datepicker> -->
+                                        <dateTimePicker v-model="checkOutDate" placeholder="Nhận phòng" :class="[validateCheckOutDate == false ? 'input-error' : '']"></dateTimePicker>
                                     </div>
                                     <div v-show="hasValidate && !validateCheckOutDate" class="required font-italic">
                                         {{ wrongCheckOutDateInfo }}
@@ -47,18 +31,18 @@
                             </div>
                             <div class="my-3">
                                 <div class="mb-2">Số lượng người lớn <span class="required">*</span></div>
-                                <div><b-form-input v-model="numberAdult" type="number" required></b-form-input></div>
+                                <div><b-form-input v-model="numberAdult" type="number" required min="0"></b-form-input></div>
                                 <div class="invalid-feedback">
                                     Thông tin bắt buộc
                                 </div>
                             </div>
                             <div class="my-3">
                                 <div class="mb-2">Số lượng trẻ em</div>
-                                <div><b-form-input v-model="numberChildren" type="number"></b-form-input></div>
+                                <div><b-form-input v-model="numberChildren" type="number" min="0"></b-form-input></div>
                             </div>
                             <div class="my-3">
                                 <div class="mb-2">Số lượng em bé</div>
-                                <div><b-form-input v-model="numberBaby" type="number"></b-form-input></div>
+                                <div><b-form-input v-model="numberBaby" type="number" min="0"></b-form-input></div>
                             </div>
                             <div class="my-3">
                                 <div class="mb-2">Họ tên <span class="required">*</span></div>
@@ -142,7 +126,7 @@
                     </div>
                 </div>
             </div>
-            <div class="mb-5">
+            <div class="mb-5 text-center">
                 <b-button variant="primary" @click="onConfirmBook">Đặt phòng</b-button>
             </div>
         </form>
@@ -231,10 +215,8 @@ export default class RoomComponent extends Vue {
     hotelService: HotelService = new HotelService();
 
     bookingHotel: Hotel = new Hotel();
-    checkInDate: string = '';
-    checkInValue: Date | null = null;
-    checkOutDate: string = '';
-    checkOutValue: Date | null = null;
+    checkInDate: string | null = null;
+    checkOutDate: string | null = null;
     numberAdult: number | null = null;
     numberChildren: number | null = null;
     numberBaby: number | null = null;
@@ -260,16 +242,6 @@ export default class RoomComponent extends Vue {
         const freeHotelServices = (hotelInfo.freeServices as string).split(',').map(s => FreeService[s]);
         const hotelServices = (hotelInfo.services as string).split(',').map(s => ServiceHotel[s]);
         this.bookingHotel = new Hotel(hotelInfo.id, hotelInfo.name, hotelInfo.srcImg, Number(hotelInfo.price), hotelInfo.star, hotelInfo.address, freeHotelServices, hotelServices, hotelInfo.isSale);
-    }
-
-    onInputCheckInDate(date: Date) {
-        this.checkInDate = moment(date).format('D/M/YYYY');
-        this.checkInValue = date;
-    }
-
-    onInputCheckoutDate(date: Date) {
-        this.checkOutDate = moment(date).format('D/M/YYYY');
-        this.checkOutValue = date;
     }
 
     get totalDaysRent() {
@@ -319,27 +291,31 @@ export default class RoomComponent extends Vue {
         }
     }
 
+    get today(): moment.Moment {
+        return moment().startOf('day');
+    }
+
     get validateCheckInDate(): boolean | null {
         if (!this.hasValidate) return null;
-        return !!this.checkInDate && moment(this.checkInValue).isSameOrAfter(moment()) && moment(this.checkInValue).isBefore(this.checkOutValue);
+        return !!this.checkInDate && this.$moment(this.checkInDate).isSameOrAfter(this.today) && this.$moment(this.checkInDate).isBefore(this.$moment(this.checkOutDate));
     }
 
     get validateCheckOutDate(): boolean | null {
         if (!this.hasValidate) return null;
-        return !!this.checkOutDate && moment(this.checkInValue).isSameOrAfter(moment()) && moment(this.checkInValue).isBefore(this.checkOutValue);
+        return !!this.checkOutDate && this.$moment(this.checkInDate).isSameOrAfter(this.today) && this.$moment(this.checkInDate).isBefore(this.$moment(this.checkOutDate));
     }
 
     get wrongCheckInDateInfo(): string {
         if (!this.checkInDate) return 'Bạn chưa nhập ngày nhận phòng';
-        if (moment(this.checkInValue).isBefore(moment())) return 'Ngày nhận phòng phải bằng hoặc sau ngày hôm nay';
-        if (moment(this.checkInValue).isSameOrAfter(this.checkOutValue)) return 'Ngày nhận phòng phải trước ngày trả phòng';
+        if (this.$moment(this.checkInDate).isBefore(this.today)) return 'Ngày nhận phòng phải bằng hoặc sau ngày hôm nay';
+        if (this.$moment(this.checkInDate).isSameOrAfter(this.$moment(this.checkOutDate))) return 'Ngày nhận phòng phải trước ngày trả phòng';
         return '';
     }
 
     get wrongCheckOutDateInfo(): string {
         if (!this.checkOutDate) return 'Bạn chưa nhập ngày trả phòng';
-        if (moment(this.checkOutValue).isSameOrBefore(moment())) return 'Ngày trả phòng phải sau ngày hôm nay';
-        if (moment(this.checkOutValue).isSameOrBefore(this.checkInValue)) return 'Ngày trả phòng phải sau ngày nhận phòng';
+        if (this.$moment(this.checkOutDate).isSameOrBefore(this.today)) return 'Ngày trả phòng phải sau ngày hôm nay';
+        if (this.$moment(this.checkOutDate).isSameOrBefore(this.$moment(this.checkInDate))) return 'Ngày trả phòng phải sau ngày nhận phòng';
         return '';
     }
 
@@ -384,6 +360,11 @@ export default class RoomComponent extends Vue {
         color: $color-black;
         cursor: pointer;
     }
+}
+
+.was-validated .form-control.input-error {
+    border: 1px solid $color-red;
+    background-image: none;
 }
 
 </style>

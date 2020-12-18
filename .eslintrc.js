@@ -38,6 +38,7 @@ module.exports = {
         "vue/attributes-order": "off",
         "vue/no-use-v-if-with-v-for": "off",
         "vue/no-parsing-error": "off",
-        "vue/no-v-html": "off"
+        "vue/no-v-html": "off",
+        "spaced-comment": "off"
     }
 }
