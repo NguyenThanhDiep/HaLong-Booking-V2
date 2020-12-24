@@ -52,7 +52,14 @@
             <h5 class="text-center">Món ăn ngon ở Hạ Long</h5>
             <div class="px-5">
                 <b-card-group v-for="(array, indexArr) in dishesFormat" :key="indexArr" deck>
-                    <b-card v-for="(dish, index) in array" :key="dish.name" :class="[index==3?'d-none d-lg-block':index==2?'d-none d-md-block':'']" class="m-2" no-body>
+                    <b-card
+                        v-for="(dish, index) in array"
+                        :key="dish.name"
+                        :class="[index==3?'d-none d-lg-block':index==2?'d-none d-md-block':'']"
+                        class="m-2"
+                        no-body
+                        @click="onClickScene"
+                    >
                         <div class="card-hotel">
                             <b-card-img-lazy :src="dish.srcImg" :alt="'Dish' + index"></b-card-img-lazy>
                         </div>
@@ -138,7 +145,7 @@ export default class HomeComponent extends Vue {
     }
 
     onClickHotelImg(hotelId: number) {
-        this.$router.push({ name: 'Hotel', params: { hotelId: hotelId.toString() } });
+        this.$router.push({ name: 'hotel-id', params: { id: hotelId.toString() } });
     }
 
     onClickScene() {

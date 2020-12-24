@@ -3,7 +3,7 @@
         <div>
             <SearchComponent />
         </div>
-        <div class="travel-experience row p-5">
+        <div class="travel-experience row p-5 w-100">
             <div class="col-8">
                 <h2 class="font-weight-bold">Kinh nghiệm du lịch vịnh Hạ Long 2020 có gì cần biết?</h2>
                 <div>
@@ -834,7 +834,7 @@
             </div>
         </div>
         <div>
-            <button id="scrollTopBtn" @click="scrollToTop"><i class="fas fa-long-arrow-alt-up"></i></button>
+            <button id="scrollTopBtn" @click="goToTop"><i class="fas fa-long-arrow-alt-up"></i></button>
         </div>
     </div>
 </template>
@@ -848,7 +848,7 @@ import SearchComponent from '@/components/Search.vue';
 })
 export default class TravelExperienceComponent extends Vue {
     mounted() {
-        this.scrollToTop();
+        this.goToTop();
         const crollToTopBtn = document.getElementById("scrollTopBtn") as HTMLButtonElement;
         window.onscroll = function () {
             if (document.body.scrollTop > 20 || document.documentElement.scrollTop > 20) {
@@ -859,9 +859,8 @@ export default class TravelExperienceComponent extends Vue {
         };
     }
 
-    scrollToTop() {
-        document.body.scrollTop = 0;
-        document.documentElement.scrollTop = 0;
+    goToTop() {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
     }
 }
 </script>
@@ -979,11 +978,14 @@ export default class TravelExperienceComponent extends Vue {
     height: 40px;
     width: 40px;
     font-size: 20px;
-    //padding-bottom: 5px;
-    background-color: #bbb;
+    background-color: $color-light-grey;
     border-radius: 50%;
+    opacity: 0.5;
     &:hover {
-        background-color: $color-blue;
+        opacity: 1;
+    }
+    &:focus {
+        outline: none;
     }
   }
 </style>
