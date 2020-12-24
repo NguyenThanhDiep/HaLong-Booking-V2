@@ -16,41 +16,22 @@
                     <b-input
                         id="inline-form-input-name"
                         v-model="nameHotel"
-                        class="mb-2 mr-md-2 mb-md-0"
                         placeholder="Tên khách sạn"
                     ></b-input>
                 </div>
-                <div class="col-lg-3 col-md-12 mt-lg-0 pl-0 mt-md-2">
+                <div class="mt-2 col-lg-3 col-md-12 mt-lg-0 pl-0 mt-md-2">
                     <dateTimePicker v-model="checkInDate" placeholder="Nhận phòng" :class="[validateCheckInDate == false ? 'input-error' : '']"></dateTimePicker>
-                    <!-- <b-form-datepicker
-                        v-model="checkInDate"
-                        class="mb-2 mr-md-2 mb-md-0"
-                        placeholder="Nhận phòng"
-                        :date-format-options="{ year: 'numeric', month: 'numeric', day: 'numeric' }"
-                        locale="vi"
-                        :value-as-date="true"
-                        :state="validateCheckInDate"
-                    ></b-form-datepicker> -->
                     <div v-show="validateCheckInDate===false" class="required font-italic">
                         {{ wrongCheckInDateInfo }}
                     </div>
                 </div>
-                <div class="col-lg-3 col-md-12 mt-lg-0 pl-0 mt-md-2">
+                <div class="mt-2 col-lg-3 col-md-12 mt-lg-0 pl-0 mt-md-2">
                     <dateTimePicker v-model="checkOutDate" placeholder="Trả phòng" :class="[validateCheckOutDate == false ? 'input-error' : '']"></dateTimePicker>
-                    <!-- <b-form-datepicker
-                        v-model="checkOutDate"
-                        class="mb-2 mr-md-2 mb-md-0"
-                        placeholder="Trả phòng"
-                        :date-format-options="{ year: 'numeric', month: 'numeric', day: 'numeric' }"
-                        locale="vi"
-                        :value-as-date="true"
-                        :state="validateCheckOutDate"
-                    ></b-form-datepicker> -->
                     <div v-show="validateCheckOutDate===false" class="required font-italic">
                         {{ wrongCheckOutDateInfo }}
                     </div>
                 </div>
-                <div class="col-lg-2 col-md-12 mt-md-2 mt-lg-0 pl-md-0 text-lg-left">
+                <div class="mt-2 pl-0 col-lg-2 col-md-12 mt-md-2 mt-lg-0 pl-md-0 text-lg-left">
                     <b-button class="w-lg-100 px-5" :disabled="isDisableSearchButton" variant="primary" @click="onSearchHotel">Tìm</b-button>
                 </div>
             </div>
