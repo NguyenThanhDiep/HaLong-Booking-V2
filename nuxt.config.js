@@ -77,6 +77,7 @@ export default {
 
     // Build Configuration (https://go.nuxtjs.dev/config-build)
     build: {
-        transpile: ['bootstrap-vue']
+        transpile: ['bootstrap-vue'],
+        babel: { compact: true }
     }
 }
