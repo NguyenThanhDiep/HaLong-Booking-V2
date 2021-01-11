@@ -1,25 +1,22 @@
 <template>
-    <dateTimePicker
-        ref="datePicker"
-        v-model="selectedDate"
-        name="date"
-        :config="selectedOptions"
-        @dp-show="onShow"
-        @dp-change="onChange"
-        @dp-update="onUpdate"
-    ></dateTimePicker>
+    <client-only placeholder="Loading...">
+        <dateTimePicker
+            ref="datePicker"
+            v-model="selectedDate"
+            name="date"
+            :config="selectedOptions"
+            @dp-show="onShow"
+            @dp-change="onChange"
+            @dp-update="onUpdate"
+        ></dateTimePicker>
+    </client-only>
 </template>
 
 <script lang="ts">
 import { Vue, Prop, Component } from 'nuxt-property-decorator';
-import dateTimePicker from 'vue-bootstrap-datetimepicker';
 import 'pc-bootstrap4-datetimepicker/build/css/bootstrap-datetimepicker.css';
 
-@Component({
-    components: {
-        dateTimePicker
-    }
-})
+@Component({})
 export default class DateTimePickerComponent extends Vue {
     @Prop() value!: Date;
     @Prop() customOptions!: any;

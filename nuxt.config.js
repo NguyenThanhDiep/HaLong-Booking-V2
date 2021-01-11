@@ -1,6 +1,6 @@
 export default {
     // Disable server-side rendering (https://go.nuxtjs.dev/ssr-mode)
-    ssr: false,
+    ssr: true,
 
     // Global page headers (https://go.nuxtjs.dev/config-head)
     head: {
@@ -28,7 +28,8 @@ export default {
     plugins: [
         '~plugins/bootstrapVue.ts',
         '~plugins/commonFilters.ts',
-        '~plugins/moment.ts'
+        '~plugins/moment.ts',
+        { src: '~/plugins/dateTimePicker.ts', mode: 'client' }
     ],
 
     // Auto import components (https://go.nuxtjs.dev/config-components)
