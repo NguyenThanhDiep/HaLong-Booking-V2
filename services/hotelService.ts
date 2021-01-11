@@ -1,4 +1,4 @@
-import environment from '@/environment/environment.dev';
+import { environment } from '@/environment/environment.dev';
 import HttpService from './httpService';
 
 export default class HotelService {
