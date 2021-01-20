@@ -31,7 +31,7 @@
                         <div class="font-weight-bold">Dịch vụ miễn phí</div>
                         <b-form-group>
                             <b-form-checkbox-group v-model="filterFreeServices" stacked>
-                                <b-form-checkbox v-for="freeService in freeServiceHotel" :key="freeService.code" :value="freeService.code">{{ freeService.name }}</b-form-checkbox>
+                                <b-form-checkbox v-for="freeService in freeServiceHotel" :key="freeService" :value="freeService">{{ freeService }}</b-form-checkbox>
                             </b-form-checkbox-group>
                         </b-form-group>
                     </div>
@@ -39,7 +39,7 @@
                         <div class="font-weight-bold">Các tiện ích</div>
                         <b-form-group>
                             <b-form-checkbox-group v-model="filerServices" stacked>
-                                <b-form-checkbox v-for="service in serviceHotel" :key="service.code" :value="service.code">{{ service.name }}</b-form-checkbox>
+                                <b-form-checkbox v-for="service in serviceHotel" :key="service" :value="service">{{ service }}</b-form-checkbox>
                             </b-form-checkbox-group>
                         </b-form-group>
                     </div>
@@ -84,10 +84,10 @@
                             <b-form-checkbox-group v-model="filterFreeServices" stacked>
                                 <b-form-checkbox
                                     v-for="freeService in freeServiceHotel"
-                                    :key="freeService.code"
-                                    :value="freeService.code"
+                                    :key="freeService"
+                                    :value="freeService"
                                 >
-                                    {{ freeService.name }}
+                                    {{ freeService }}
                                 </b-form-checkbox>
                             </b-form-checkbox-group>
                         </b-form-group>
@@ -96,8 +96,8 @@
                         <div class="font-weight-bold">Các tiện ích</div>
                         <b-form-group>
                             <b-form-checkbox-group v-model="filerServices" stacked>
-                                <b-form-checkbox v-for="service in serviceHotel" :key="service.code" :value="service.code">
-                                    {{ service.name }}
+                                <b-form-checkbox v-for="service in serviceHotel" :key="service" :value="service">
+                                    {{ service }}
                                 </b-form-checkbox>
                             </b-form-checkbox-group>
                         </b-form-group>
@@ -132,7 +132,7 @@
                             <div class="font-weight-bold">Dịch vụ và tiện ích</div>
                             <!-- eslint-disable-next-line vue/no-use-v-if-with-v-for -->
                             <div v-for="(service, indexService) in [...hotel.freeServices, ...hotel.services]" :key="indexService" v-if="indexService<=4 || hotel.isShowAll" class="black">
-                                - {{ service.name }}
+                                - {{ service }}
                             </div>
                             <div v-if="!hotel.isShowAll && hotel.totalServises>5" class="pointer" @click="hotel.isShowAll=true">...hiện thêm >></div>
                             <!-- eslint-disable-next-line vue/no-parsing-error -->
@@ -174,9 +174,9 @@ export default class FindHotelComponent extends Vue {
     filterStars: Array<any> = [];
     starHotel: Array<number> = StarHotel;
     filterFreeServices: Array<any> = [];
-    freeServiceHotel = FreeService;
+    freeServiceHotel: Array<string> = [];
     filerServices: Array<any> = [];
-    serviceHotel = ServiceHotel;
+    serviceHotel: Array<string> = [];
     isSortStarAsc: boolean | null = null;
     sortStarIcon: string = '';
     isSortPriceAsc: boolean | null = null;
@@ -191,14 +191,32 @@ export default class FindHotelComponent extends Vue {
         } else resAllHotels = await this.hotelService.getAllHotels();
         this.hotelsOrigin = this.mapDataFromAPI(resAllHotels);
         this.hotelsFiltered = this.hotelsOrigin.splice(0, this.hotelsOrigin.length, ...this.hotelsOrigin);
+        this.buildFilterOptions();
     }
 
     mapDataFromAPI(data: Array<any>): Hotel[] {
         return data.map((h) => {
-            const freeServices = h.freeServices.split(',').map((s: string) => FreeService[s]);
-            const services = h.services.split(',').map((s: string) => ServiceHotel[s]);
+            const freeServices = h.freeServices.split(',');
+            const services = h.services.split(',');
             return new Hotel(h.id, h.name, h.srcImg, Number(h.price), h.star, h.address, freeServices, services, h.isSale);
         });
+    }
+
+    buildFilterOptions() {
+        this.freeServiceHotel = [];
+        this.serviceHotel = [];
+        this.hotelsOrigin.forEach((hotel) => {
+            hotel.freeServices.forEach((s) => {
+                if (!this.freeServiceHotel.includes(s)) {
+                    this.freeServiceHotel.push(s);
+                }
+            })
+            hotel.services.forEach((s) => {
+                if (!this.serviceHotel.includes(s)) {
+                    this.serviceHotel.push(s);
+                }
+            })
+        })
     }
 
     onClickSortStar() {
@@ -309,10 +327,10 @@ export default class FindHotelComponent extends Vue {
             result = result.filter(h => this.filterCriteria.star.includes(h.star));
         }
         if (this.filterCriteria.freeService.length > 0) {
-            result = result.filter(h => h.freeServices.some(s => this.filterCriteria.freeService.includes(s.code)));
+            result = result.filter(h => h.freeServices.some(s => this.filterCriteria.freeService.includes(s)));
         }
         if (this.filterCriteria.service.length > 0) {
-            result = result.filter(h => h.services.some(s => this.filterCriteria.service.includes(s.code)));
+            result = result.filter(h => h.services.some(s => this.filterCriteria.service.includes(s)));
         }
         this.hotelsFiltered = result;
         this.resetSort();
@@ -336,6 +354,7 @@ export default class FindHotelComponent extends Vue {
         }
         this.hotelsOrigin = this.mapDataFromAPI(resAllHotels);
         this.hotelsFiltered = this.hotelsOrigin.splice(0, this.hotelsOrigin.length, ...this.hotelsOrigin);
+        this.buildFilterOptions();
     }
 
     onClickMap() {

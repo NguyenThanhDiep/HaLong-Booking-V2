@@ -86,7 +86,7 @@
                                 <div>
                                     <div class="font-weight-bold">Miễn phí</div>
                                     <div>
-                                        <div v-for="(service, indexService) in bookingHotel.allServices" :key="indexService">- {{ service.name }}</div>
+                                        <div v-for="(service, indexService) in bookingHotel.allServices" :key="indexService">- {{ service }}</div>
                                     </div>
                                 </div>
                             </div>
@@ -239,8 +239,8 @@ export default class RoomComponent extends Vue {
 
     mapDataFromAPI(res: any) {
         const hotelInfo = res.hotel;
-        const freeHotelServices = (hotelInfo.freeServices as string).split(',').map(s => FreeService[s]);
-        const hotelServices = (hotelInfo.services as string).split(',').map(s => ServiceHotel[s]);
+        const freeHotelServices = (hotelInfo.freeServices as string).split(',');
+        const hotelServices = (hotelInfo.services as string).split(',');
         this.bookingHotel = new Hotel(hotelInfo.id, hotelInfo.name, hotelInfo.srcImg, Number(hotelInfo.price), hotelInfo.star, hotelInfo.address, freeHotelServices, hotelServices, hotelInfo.isSale);
     }
 

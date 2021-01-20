@@ -8,15 +8,15 @@ export default class Hotel {
     price: number = 0;
     star: number = 0;
     address: string = '';
-    freeServices: Array<Option> = [];
-    services: Array<Option> = [];
+    freeServices: Array<string> = [];
+    services: Array<string> = [];
     isSale: boolean = false;
     isShowAll: boolean = false;
     rooms: Array<Room> = [];
 
     constructor(id: number = 0, name: string = '', scrImg: string = '', price: number = 0, star: number = 0,
-        address: string = '', freeServices: Array<{ code: string; name: string }> = [],
-        services: Array<{ code: string; name: string }> = [], isSale = false) {
+        address: string = '', freeServices: Array<string> = [],
+        services: Array<string> = [], isSale = false) {
         this.id = id;
         this.name = name;
         this.srcImg = scrImg;
@@ -32,7 +32,7 @@ export default class Hotel {
         return this.freeServices.length + this.services.length;
     }
 
-    get allServices(): Array<Option> {
+    get allServices(): Array<string> {
         return [...this.freeServices, ...this.services];
     }
 }
