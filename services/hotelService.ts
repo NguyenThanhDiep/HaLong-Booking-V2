@@ -19,4 +19,8 @@ export default class HotelService {
     public async getRoomById(roomId: string) {
         return await this.httpService.get<any>(environment.ApiHotel.GetRoomById.replace('{roomId}', roomId));
     }
+
+    public async createBooking(model) {
+        return await this.httpService.post<any>(environment.ApiHotel.AllBookings, model);
+    }
 }

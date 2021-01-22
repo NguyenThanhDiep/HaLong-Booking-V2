@@ -206,6 +206,7 @@ import Hotel, { FreeService, ServiceHotel } from '@/models/Hotel';
 import moment from 'moment';
 import HotelService from '@/services/hotelService';
 import dateTimePicker from '@/components/DateTimePicker.vue';
+import Room from '~/models/Room';
 
 @Component({
     components: { SearchComponent, dateTimePicker }
@@ -215,6 +216,7 @@ export default class RoomComponent extends Vue {
     hotelService: HotelService = new HotelService();
 
     bookingHotel: Hotel = new Hotel();
+    bookingRoom: Room = new Room();
     checkInDate: string | null = null;
     checkOutDate: string | null = null;
     numberAdult: number | null = null;
@@ -238,10 +240,18 @@ export default class RoomComponent extends Vue {
     }
 
     mapDataFromAPI(res: any) {
+        //Hotel Data
         const hotelInfo = res.hotel;
         const freeHotelServices = (hotelInfo.freeServices as string).split(',');
         const hotelServices = (hotelInfo.services as string).split(',');
         this.bookingHotel = new Hotel(hotelInfo.id, hotelInfo.name, hotelInfo.srcImg, Number(hotelInfo.price), hotelInfo.star, hotelInfo.address, freeHotelServices, hotelServices, hotelInfo.isSale);
+        //Room Data
+        this.bookingRoom.id = res.id;
+        this.bookingRoom.name = res.name;
+        this.bookingRoom.price = res.price;
+        this.bookingRoom.srcImg = res.srcImg;
+        this.bookingRoom.capacity = res.capacity.split(',');
+        this.bookingRoom.freeServices = res.freeServices.split(',');
     }
 
     get totalDaysRent() {
@@ -331,13 +341,43 @@ export default class RoomComponent extends Vue {
         }
     }
 
-    onBookRoom() {
+    convertToFormatDateDB(dateString: string): string {
+        let formatedDate = '';
+        const dataDate = dateString.split('/');
+        if (dataDate.length === 3) {
+            formatedDate = dataDate[2] + '-' + dataDate[1] + '-' + dataDate[0];
+        }
+        return formatedDate;
+    }
+
+    buildDataForAPI() {
+        return {
+            nameCustomer: this.fullName,
+            phoneNumber: this.phoneNumber,
+            email: this.email,
+            checkInDate: this.checkInDate ? this.convertToFormatDateDB(this.checkInDate) : null,
+            checkOutDate: this.checkOutDate ? this.convertToFormatDateDB(this.checkOutDate) : null,
+            numberAdult: Number(this.numberAdult),
+            numberChildren: Number(this.numberChildren),
+            numberBaby: Number(this.numberBaby),
+            note: this.note,
+            hotelId: this.bookingHotel.id,
+            roomId: this.bookingRoom.id
+        }
+    }
+
+    async onBookRoom() {
         this.isShowConfirmPopup = false;
+        const modelBooking = this.buildDataForAPI();
+        const rs = await this.hotelService.createBooking(modelBooking);
         // this.$toast.success('Hoàn tất!!! Cảm ơn bạn đã chọn công ty chúng tôi.', { duration: 3000 });
-        this.$bvToast.toast('Cảm ơn bạn đã chọn công ty chúng tôi.', {
-            title: 'Hoàn tất!!!',
-            variant: 'success'
-        });
+        if (rs) {
+            new Vue().$bvToast.toast('Cảm ơn bạn đã chọn công ty chúng tôi. Chúng tôi sẽ liên hệ với bạn trong thời gian sớm nhất.', {
+                title: 'Hoàn tất!!!',
+                variant: 'success'
+            });
+            this.$router.push({ path: '/' });
+        }
     }
 }
 </script>
