@@ -89,14 +89,14 @@ export default class HotelComponent extends Vue {
             else this.$router.push({ name: 'Home' });
         }
 
-        this.allImg = [
-            "https://r-cf.bstatic.com/images/hotel/max1024x768/195/195444614.jpg",
-            "https://r-cf.bstatic.com/images/hotel/max1024x768/192/192958857.jpg",
-            "https://ihg.scene7.com/is/image/ihg/even-hotels-eugene-5405616297-4x3",
-            "https://media-cdn.tripadvisor.com/media/photo-s/16/1a/ea/54/hotel-presidente-4s.jpg",
-            "https://www.welcome-hotels.com/site/assets/files/35059/welcome_hotel_marburg_lobby_2k.2560x1600.jpg",
-            "https://pix10.agoda.net/hotelImages/209/2092140/2092140_17031512040051555216.jpg?s=1024x768"
-        ];
+        // this.allImg = [
+        //     "https://r-cf.bstatic.com/images/hotel/max1024x768/195/195444614.jpg",
+        //     "https://r-cf.bstatic.com/images/hotel/max1024x768/192/192958857.jpg",
+        //     "https://ihg.scene7.com/is/image/ihg/even-hotels-eugene-5405616297-4x3",
+        //     "https://media-cdn.tripadvisor.com/media/photo-s/16/1a/ea/54/hotel-presidente-4s.jpg",
+        //     "https://www.welcome-hotels.com/site/assets/files/35059/welcome_hotel_marburg_lobby_2k.2560x1600.jpg",
+        //     "https://pix10.agoda.net/hotelImages/209/2092140/2092140_17031512040051555216.jpg?s=1024x768"
+        // ];
         this.imgSelected = this.allImg[0];
         this.mainPropsImg = {
             center: true,
@@ -117,6 +117,7 @@ export default class HotelComponent extends Vue {
         this.hotel.star = res.star;
         this.hotel.address = res.address;
         this.hotel.isSale = res.isSale;
+        this.allImg = res.srcDetailImgs.split(",");
         (res.rooms as Array<any>).forEach((r) => {
             const room = new Room();
             room.id = r.id;
